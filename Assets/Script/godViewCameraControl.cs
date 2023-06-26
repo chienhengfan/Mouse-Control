@@ -7,7 +7,7 @@ public class godViewCameraControl : MonoBehaviour
 {
     public Transform followTarget;
     public float scrollSpeed = 6f;
-    public float followDistance;
+    private float followDistance;
     private Vector3 followDirectoin;
 
     void Start()

@@ -2,37 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GodViewControl : MonoBehaviour
+public class GodViewControl2 : MonoBehaviour
 {
     public float moveSpeed = 2.0f;
     public LayerMask iLayerMask;
     private Camera cam;
+    private CharacterController characterControl;
 
-    
+
     void Start()
     {
         cam = Camera.main;
+        characterControl = GetComponent<CharacterController>();
     }
 
     public void MoveForward(Vector3 direction, float moveAFrame)
     {
-        direction.y = 0f;
-        transform.forward = direction;
-
-        Vector3 moveTarget = transform.position + direction * moveAFrame;
-        Vector3 moveTargetUp = moveTarget;
-        moveTargetUp.y += 1.0f;
-
-        RaycastHit rh = new RaycastHit();
-        if(Physics.Raycast(moveTargetUp, -Vector3.up, out rh, 5f, iLayerMask))
-        {
-            if(transform.position.y - rh.point.y < 0.5)
-            {
-                transform.position = rh.point;
-            }         
-            Debug.Log("hit");
-        }
-        else { Debug.Log("no hit"); }
+        float speedSimpleMove = moveAFrame / Time.deltaTime;
+        //simpleMove will multiply Time.deltatime, thus not do it again 
+        characterControl.SimpleMove(direction * speedSimpleMove);
     }
 
     void Update()
@@ -61,6 +49,12 @@ public class GodViewControl : MonoBehaviour
             }
 
             
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Vector3 jumpDirection = Vector3.up;
+            transform.position += jumpDirection * 10f;
         }
         main.Singleton().cameraControl.MoveCamera();
     }
